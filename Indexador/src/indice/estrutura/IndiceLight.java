@@ -157,19 +157,20 @@ public class IndiceLight extends Indice
             for (String termo : posicaoIndice.keySet()) {
                 arrTermPorId[posicaoIndice.get(termo).getIdTermo()] = posicaoIndice.get(termo);
             }
-
+            
+            // MUDAR
             for (int i = 0; i < arrTermPorId.length; i++) {
                 int count = 0;
                 int posicaoInicial = 0;
 
-                for (int j = 0; j < arrTermId.length; j++) {
-                    if(arrTermPorId[i].getIdTermo() == arrTermId[j]) {
-                        if (count == 0) 
-                            posicaoInicial = j;
-                        
-                       count++;
-                    }
-                }
+//                for (int j = 0; j < arrTermId.length; j++) {
+//                    if(arrTermPorId[i].getIdTermo() == arrTermId[j]) {
+//                        if (count == 0) 
+//                            posicaoInicial = j;
+//                        
+//                       count++;
+//                    }
+//                }
                 
                 arrTermPorId[i].setNumDocumentos(count);
                 arrTermPorId[i].setPosInicial(posicaoInicial);
