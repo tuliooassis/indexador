@@ -19,7 +19,7 @@ public class TesteEstruturaIndice {
 	
 	@Before
 	public void iniciaIndice(){
-		//indiceTeste = new IndiceSimples();
+                //indiceTeste = new IndiceSimples();
 		indiceTeste = new IndiceLight(1000);
 		
 		//casa apareceu 10 vezes no doc. 1

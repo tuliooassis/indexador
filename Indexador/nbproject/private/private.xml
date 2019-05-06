@@ -3,12 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/aluno/Área%20de%20Trabalho/Indexador/src/indice/estrutura/IndiceLight.java</file>
-            <file>file:/home/aluno/Área%20de%20Trabalho/Indexador/src/indice/estrutura/PosicaoVetor.java</file>
-            <file>file:/home/aluno/Área%20de%20Trabalho/Indexador/src/indice/estrutura/Ocorrencia.java</file>
-            <file>file:/home/aluno/Área%20de%20Trabalho/Indexador/src/indice/estrutura/Indice.java</file>
-            <file>file:/home/aluno/Área%20de%20Trabalho/Indexador/test/indice/teste/TesteEstruturaIndice.java</file>
-            <file>file:/home/aluno/Área%20de%20Trabalho/Indexador/src/indice/estrutura/IndiceSimples.java</file>
+            <file>file:/home/aluno/indexador/Indexador/src/indexador/Indexador.java</file>
+            <file>file:/home/aluno/indexador/Indexador/src/indice/estrutura/IndiceSimples.java</file>
+            <file>file:/home/aluno/indexador/Indexador/test/indice/teste/TesteEstruturaIndice.java</file>
         </group>
     </open-files>
 </project-private>
