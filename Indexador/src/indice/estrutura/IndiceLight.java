@@ -159,18 +159,27 @@ public class IndiceLight extends Indice
                 arrTermPorId[posicaoIndice.get(termo).getIdTermo()] = posicaoIndice.get(termo);
             }
 
-            for (int i = 1; i < this.lastIdx + 1; i++) {
+            for (int i = 0; i < this.lastIdx + 1; i++) {
                 int id = arrTermId[i];
-                int idAnterior = arrTermId[i-1];
+                int idAnterior = -1;
+                if (i-1 >= 0){
+                    idAnterior = arrTermId[i-1];
+                }
                 
-                if(arrTermPorId[id] != arrTermPorId[idAnterior]){
+                if (idAnterior >= 0){
+                    if(arrTermPorId[id] != arrTermPorId[idAnterior]){
+                        arrTermPorId[id].setPosInicial(i);
+                        arrTermPorId[id].setNumDocumentos(1);
+                    }
+                    else {
+                        arrTermPorId[id].setNumDocumentos(arrTermPorId[id].getNumDocumentos() + 1);
+                    }
+                } else {
                     arrTermPorId[id].setPosInicial(i);
                     arrTermPorId[id].setNumDocumentos(1);
                 }
-                else {
-                    arrTermPorId[id].setNumDocumentos(arrTermPorId[id].getNumDocumentos() + 1);
-                }
             }
+                
 
 	}
 
