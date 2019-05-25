@@ -50,7 +50,7 @@ public class IndiceLight extends Indice
 	{
             ArrayList<Integer> docs = new ArrayList();
             
-            for (int i = 0; i < arrDocId.length; i++) {
+            for (int i = 0; i < this.lastIdx + 1; i++) {
                 if(!docs.contains(arrDocId[i])){
                     docs.add(arrDocId[i]);
                 }
@@ -153,19 +153,22 @@ public class IndiceLight extends Indice
 	@Override
 	public void concluiIndexacao(){
             ordenaIndice();
-            PosicaoVetor[] arrTermPorId = new PosicaoVetor[this.lastTermId + 1];
+            PosicaoVetor[] arrTermPorId = new PosicaoVetor[this.lastTermId];
             
             for (String termo : posicaoIndice.keySet()) {
                 arrTermPorId[posicaoIndice.get(termo).getIdTermo()] = posicaoIndice.get(termo);
             }
 
-            for (int i = 1; i < this.lastIdx; i++) {
-                if(arrTermPorId[i] != arrTermPorId[i-1]){
-                    arrTermPorId[i].setPosInicial(i);
-                    arrTermPorId[i].setNumDocumentos(1);
+            for (int i = 1; i < this.lastIdx + 1; i++) {
+                int id = arrTermId[i];
+                int idAnterior = arrTermId[i-1];
+                
+                if(arrTermPorId[id] != arrTermPorId[idAnterior]){
+                    arrTermPorId[id].setPosInicial(i);
+                    arrTermPorId[id].setNumDocumentos(1);
                 }
                 else {
-                    arrTermPorId[i].setNumDocumentos(arrTermPorId[i].getNumDocumentos());
+                    arrTermPorId[id].setNumDocumentos(arrTermPorId[id].getNumDocumentos() + 1);
                 }
             }
 
