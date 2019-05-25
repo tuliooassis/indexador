@@ -75,28 +75,29 @@ public class IndiceLight extends Indice
 	@Override
 	public void index(String termo, int docId, int freqTermo)
 	{
-            int idTermo;
+            PosicaoVetor posicaoVetor = null;
+            
+            this.lastIdx ++;
             if (posicaoIndice.containsKey(termo)){
-                idTermo = posicaoIndice.get(termo).getIdTermo();
+                posicaoVetor = posicaoIndice.get(termo);
             }
             else {
-                lastIdx++;
+                posicaoVetor = new PosicaoVetor(lastTermId);
+                posicaoVetor.setNumDocumentos(docId);
+                posicaoIndice.put(termo, posicaoVetor);
                 lastTermId++;
-                PosicaoVetor posicaoNew = new PosicaoVetor(lastTermId);
-                posicaoNew.setPosInicial(lastIdx);
-                posicaoIndice.put(termo, posicaoNew);
             }
             //aumenta capacidade do vetor
-            if(arrDocId.length >= posicaoIndice.get(termo).getPosInicial() ){
+            if(arrDocId.length <= this.lastIdx){
                 arrDocId = aumentaCapacidadeVetor(arrDocId,arrDocId.length*0.1);
                 arrTermId = aumentaCapacidadeVetor(arrTermId,arrTermId.length*0.1);
                 arrFreqTermo = aumentaCapacidadeVetor(arrFreqTermo,arrFreqTermo.length*0.1);
                 System.gc();
             }
             //adiciona valores correspondentes nos vetores
-            arrDocId[posicaoIndice.get(termo).getPosInicial()] = docId;
-            arrTermId[posicaoIndice.get(termo).getPosInicial()] = posicaoIndice.get(termo).getIdTermo();
-            arrFreqTermo[posicaoIndice.get(termo).getPosInicial()] = freqTermo;
+            arrDocId[this.lastIdx] = docId;
+            arrTermId[this.lastIdx] = posicaoVetor.getIdTermo();
+            arrFreqTermo[this.lastIdx] = freqTermo;
             
 	}
 
@@ -157,25 +158,17 @@ public class IndiceLight extends Indice
             for (String termo : posicaoIndice.keySet()) {
                 arrTermPorId[posicaoIndice.get(termo).getIdTermo()] = posicaoIndice.get(termo);
             }
-            
-            // MUDAR
-            for (int i = 0; i < arrTermPorId.length; i++) {
-                int count = 0;
-                int posicaoInicial = 0;
 
-//                for (int j = 0; j < arrTermId.length; j++) {
-//                    if(arrTermPorId[i].getIdTermo() == arrTermId[j]) {
-//                        if (count == 0) 
-//                            posicaoInicial = j;
-//                        
-//                       count++;
-//                    }
-//                }
-                
-                arrTermPorId[i].setNumDocumentos(count);
-                arrTermPorId[i].setPosInicial(posicaoInicial);
+            for (int i = 1; i < this.lastIdx; i++) {
+                if(arrTermPorId[i] != arrTermPorId[i-1]){
+                    arrTermPorId[i].setPosInicial(i);
+                    arrTermPorId[i].setNumDocumentos(1);
+                }
+                else {
+                    arrTermPorId[i].setNumDocumentos(arrTermPorId[i].getNumDocumentos());
+                }
             }
-            
+
 	}
 
 	public void ordenaIndice()
