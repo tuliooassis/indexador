@@ -37,10 +37,12 @@ public class Indexador {
         HashMap<String, Integer> mapWords = new HashMap<String, Integer>();
         
         //IndiceSimples is = new IndiceSimples();
-        IndiceLight is = new IndiceLight(1000);
+        IndiceLight is = new IndiceLight(10000);
         try {
             for (File file : listFileTree(new File("../wikiSampleTest/"))) {
                 BufferedReader in = new BufferedReader(new FileReader(file));
+                if (!file.getName().endsWith(".html")) continue;
+                
                 String str;
                 while ((str = in.readLine()) != null) {
                     contentBuilder.append(str);
