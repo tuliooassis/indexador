@@ -15,6 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -46,11 +47,12 @@ public class Indexador {
         
         //IndiceSimples is = new IndiceSimples();
         IndiceLight is = new IndiceLight(10000);
+        int countDocs = 0;
         try {
             for (File file : listFileTree(new File("../wikiSample/"))) {
                 BufferedReader in = new BufferedReader(new FileReader(file));
                 if (!file.getName().endsWith(".html")) continue;
-                
+                countDocs++;
                 String str;
                 while ((str = in.readLine()) != null) {
                     contentBuilder.append(str);
@@ -59,14 +61,15 @@ public class Indexador {
                 String content = StringEscapeUtils.unescapeHtml4(
                         contentBuilder
                                 .toString()
-                                .replaceAll("<[^>]*>", "")
+                                .replaceAll("<[^>]*>", " ")
                 );
                 
                 System.out.println("Indexando arquivo "+file.getName());
                 
                 // contando palavras
                 for (String word : content.split(" ")){
-                    word = word.replaceAll("[^a-zA-Z]+", "").toLowerCase();
+                    word = removerAcentos(word);
+                    word = word.trim().replaceAll("[^a-zA-Z]+", "").toLowerCase();
                     if (stopWords.contains(word)) continue;
                     CharSequence cs = word;
                     word = stemmer.stem(cs).toString();
@@ -81,16 +84,26 @@ public class Indexador {
                 for (String word : mapWords.keySet()){
                     is.index(word, Integer.parseInt(file.getName().replace(".html", "")), mapWords.get(word));
                 }
+                
+                if (countDocs % 100 == 0){
+                    is.concluiIndexacao();
+                    BufferedWriter writer = new BufferedWriter(new FileWriter("../output" + (int) countDocs/100 + ".txt"));
+                    writer.write(is.toString());
+                    writer.close();
+                    
+                    is = new IndiceLight(10000);
+                    System.gc();
+                    
+                }
             }
             
-            is.concluiIndexacao();
-            
-            BufferedWriter writer = new BufferedWriter(new FileWriter("../output.txt"));
-            writer.write(is.toString());
-            writer.close();
         } catch (IOException e) {
             System.err.print(e);
         }
+    }
+    
+    public static String removerAcentos(String str) {
+        return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
     }
 
     public static Collection<File> listFileTree(File dir) {
